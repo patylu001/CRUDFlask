@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: sha256:4073e6a6f54214da05256022b9a86e2f3f480703d1fc457a7085107c854e5ce3
+    environment:
+      MYSQL_DATABASE: 'calificaciones'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: '123456'
+      MYSQL_ROOT_PASSWORD: '123456'
+    ports:
+      - "3307:3306"
+
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:5001
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
