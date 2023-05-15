@@ -1,8 +1,79 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Grade Central - Student Management System{% endblock %}
 
 {% block content %}
-<h2>Home Page</h2>
-<p>Welcome back, {{ username }}!</p>
+    <h2>Grade Central</h2>
+    <div class="banner">
+            <h2>Alumnos Reprobando</h2>
+            <ul>
+                {% for alumno in alumnos_reprobando %}
+                    <li>{{' Student: ' ~ alumno.username ~ ' - ' ~ ' Second name: ' ~  alumno.second_name ~ ' - ' ~ ' Grade: ' ~  alumno.grade }}</li>
+                {% endfor %}
+            </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <p>{{ message }}</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="card card-body">
+                <form action="/crudflask/create/" method="POST">
+                    <div class="form-group">
+                        <label>
+                            <input type="text" name="name" placeholder="Name" class="form-control">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="text" name="second_name" placeholder="Second name" class="form-control">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="text" name="grade" placeholder="Grade" class="form-control">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <table class="table table-striped table-bordered bg-white table-sm">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Second name</th>
+                        <th>Grade</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.id }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.second_name }}</td>
+                            <td>{{ student.grade }}</td>
+                            <td>
+                                <a href="/crudflask/edit/{{ student.id }}" class="btn btn-secondary">Edit</a>
+                                <a href="/crudflask/delete/{{ student.id }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

@@ -1,5 +1,5 @@
 import app as app
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import re
 from flask_migrate import Migrate
@@ -28,20 +28,24 @@ migrate = Migrate(app, db)
 class Account(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
+    password = db.Column(db.String(255), nullable=False, default='password')
     email = db.Column(db.String(100), unique=True, nullable=False)
-    grade = db.Column(db.Float, nullable=False, default=0.0)
-
-
-    def __repr__(self):
-        return f"<Account(username='{self.username}', password='{self.password}', email='{self.email}', grade='{self.grade}')>"
-
-
     def __repr__(self):
         return f"<Account(username='{self.username}', password='{self.password}', email='{self.email}')>"
 
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    second_name = db.Column(db.String(255), nullable=False)
+    grade = db.Column(db.Float, default=0.0, nullable=False)
 
-@app.route('/crudflask/', methods=['GET', 'POST'])
+    def __repr__(self):
+        return f"<Student(name='{self.name}', second_name='{self.second_name}', grade='{self.grade}')>"
+
+
+
+
+@app.route('/', methods=['GET', 'POST'])
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
@@ -56,6 +60,8 @@ def login():
         else:
             msg = 'Incorrect username/password!'
     return render_template('index.html', msg=msg)
+
+
 
 
 @app.route('/crudflask/logout')
@@ -95,8 +101,11 @@ def register():
 
 @app.route('/crudflask/home')
 def home():
+    title = "Teacher's Grading Dashboard"
     if 'loggedin' in session:
-        return render_template('home.html', username=session['username'])
+        students = all_students()  # Obtén todos los registros de la base de datos
+        alumnos_reprobando = Student.query.filter(Student.grade < 59.99).all()  # Filtra los alumnos reprobando
+        return render_template('home.html', username=session['username'], students=students, alumnos_reprobando=alumnos_reprobando, title=title)
     return redirect(url_for('login'))
 
 
@@ -106,3 +115,86 @@ def profile():
         account = Account.query.filter_by(id=session['id']).first()
         return render_template('profile.html', account=account)
     return redirect(url_for('login'))
+
+
+
+@app.route('/crudflask/create/', methods=['POST'])
+def create_student():
+    students = all_students()
+    donkeys = donkey()
+    msg = ''
+    if request.method == 'POST':
+        name = request.form['name']
+        second_name = request.form['second_name']
+        grade = request.form['grade']
+
+        student = Student.query.filter_by(name=name).first()
+        if student:
+            flash('Student already exists!')
+            return render_template('home.html', students=students, donkeys=donkeys)
+
+
+        elif not name or not second_name or not grade:
+            flash('Please fill out all the fields!')
+            return render_template('home.html', students=students, donkeys=donkeys)
+
+
+        else:
+            new_student = Student(name=name, second_name=second_name, grade=grade)
+            db.session.add(new_student)
+            db.session.commit()
+            flash('Student added successfully!')
+            return render_template('home.html', students=students, donkeys=donkeys)
+
+    return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
+
+@app.route('/crudflask/edit/<id_username>', methods=['GET', 'POST'])
+def edit_student(id_username):
+
+    donkeys = donkey()
+    students = all_students()
+    msg='Alumno actualizado exitosamente'
+    alumno = Student.query.filter_by(id=id_username).first()
+
+    if not alumno:
+        return "No se encontró el alumno"
+
+    if request.method == 'POST':
+        alumno.name = request.form['name']
+        alumno.second_name = request.form['second_name']
+        alumno.grade = request.form['grade']
+        db.session.commit()
+        return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
+
+    return render_template('edit_student.html', alumno=alumno, students=students, donkeys=donkeys)
+
+
+@app.route('/crudflask/delete/<id_username>', methods=['GET', 'POST'])
+def delete_student(id_username):
+
+    donkeys = donkey()
+    students = all_students()
+    msg='Alumno eliminado exitosamente'
+    account = Student.query.get(id_username)
+
+    if not account:
+        return "No se encontró el alumno"
+
+    if request.method == 'POST':
+        db.session.delete(account)
+        db.session.commit()
+        return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
+
+    return render_template('delete_student.html', alumno=account, students=students, donkeys=donkeys)
+
+
+def donkey():
+    donkey_students = Student.query.filter(Student.grade < 59.99).all()
+    return donkey_students
+
+def all_students():
+    students = Student.query.all()
+    return students
+
+
+

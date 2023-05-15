@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Delete Student
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-4 offset-md-4">
+        <div class="card card-body">
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete the following student?</p>
+            <ul>
+                <li>Username: {{ alumno.name }}</li>
+                <li>Email: {{ alumno.second_name }}</li>
+                <li>Grade: {{ alumno.grade }}</li>
+            </ul>
+            <form action="/crudflask/delete/{{ alumno.id }}" method="POST">
+                {{ csrf_token }}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="/crudflask/edit/{{ alumno.id }}" class="btn btn-warning">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
