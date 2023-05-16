@@ -21,7 +21,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-app.run(host='0.0.0.0', port=5000)
+app.run(host='0.0.0.0', port=5555)
 
 ##Create the Account model
 class Account(db.Model):
