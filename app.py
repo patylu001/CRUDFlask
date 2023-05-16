@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
 
-# Set up the database
+## Set up the database
 DATABASE_USER = 'root'
 DATABASE_PASSWORD = '123456'
 DATABASE_HOST = 'localhost'
