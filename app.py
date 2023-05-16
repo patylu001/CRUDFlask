@@ -45,8 +45,8 @@ class Student(db.Model):
 
 
 
-@app.route('/', methods=['GET', 'POST'])
-#@app.route('/crudflask.azurewebsites.net', methods=['GET', 'POST'])
+#@app.route('/', methods=['GET', 'POST'])
+@app.route('/crudflask.azurewebsites.net', methods=['GET', 'POST'])
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
