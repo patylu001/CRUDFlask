@@ -13,7 +13,7 @@ services:
 
   web:
     build: .
-    command: gunicorn app:app --bind=0.0.0.0:$PORT
+    command: python3 manage.py runserver 0.0.0.0:5001
     volumes:
       - .:/code
     ports:
