@@ -65,8 +65,8 @@ def login():
 
 
 
-@app.route('/crudflask/logout')
-#@app.route('/crudflask.azurewebsites.net/logout')
+#@app.route('/crudflask/logout')
+@app.route('/crudflask.azurewebsites.net/logout')
 def logout():
     session.pop('loggedin', None)
     session.pop('id', None)
@@ -74,8 +74,8 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask/register', methods=['GET', 'POST'])
-#@app.route('/crudflask.azurewebsites.net/register', methods=['GET', 'POST'])
+#@app.route('/crudflask/register', methods=['GET', 'POST'])
+@app.route('/crudflask.azurewebsites.net/register', methods=['GET', 'POST'])
 def register():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
@@ -102,8 +102,8 @@ def register():
 
 
 
-@app.route('/crudflask/home')
-##@app.route('/crudflask.azurewebsites.net/home')
+#@app.route('/crudflask/home')
+@app.route('/crudflask.azurewebsites.net/home')
 def home():
     title = "Teacher's Grading Dashboard"
     if 'loggedin' in session:
@@ -113,8 +113,8 @@ def home():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask/profile')
-#@app.route('/crudflask.azurewebsites.net/profile')
+#@app.route('/crudflask/profile')
+@app.route('/crudflask.azurewebsites.net/profile')
 def profile():
     if 'loggedin' in session:
         account = Account.query.filter_by(id=session['id']).first()
