@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'crud-flask-silver'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D1B4A165BCF144F299412B6E350FA693 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B554CA96B9F34973BA0EA65A2597696A }}
