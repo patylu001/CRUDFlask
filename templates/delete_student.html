@@ -14,10 +14,10 @@
                 <li>Email: {{ alumno.second_name }}</li>
                 <li>Grade: {{ alumno.grade }}</li>
             </ul>
-            <form action="/crudflask/delete/{{ alumno.id }}" method="POST">
+            <form action="/delete/{{ alumno.id }}" method="POST">
                 {{ csrf_token }}
                 <button type="submit" class="btn btn-danger">Delete</button>
-                <a href="/crudflask/edit/{{ alumno.id }}" class="btn btn-warning">Cancel</a>
+                <a href="/edit/{{ alumno.id }}" class="btn btn-warning">Cancel</a>
             </form>
         </div>
     </div>

@@ -26,7 +26,7 @@
                 {% endif %}
             {% endwith %}
             <div class="card card-body">
-                <form action="/crudflask/create/" method="POST">
+                <form action="/create" method="POST">
                     <div class="form-group">
                         <label>
                             <input type="text" name="name" placeholder="Name" class="form-control">
@@ -67,8 +67,8 @@
                             <td>{{ student.second_name }}</td>
                             <td>{{ student.grade }}</td>
                             <td>
-                                <a href="/crudflask/edit/{{ student.id }}" class="btn btn-secondary">Edit</a>
-                                <a href="/crudflask/delete/{{ student.id }}" class="btn btn-danger">Delete</a>
+                                <a href="/edit/{{ student.id }}" class="btn btn-secondary">Edit</a>
+                                <a href="/delete/{{ student.id }}" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     {% endfor %}

@@ -45,8 +45,8 @@ class Student(db.Model):
 
 
 
+#@app.route('/', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
-#@app.route('/crudflask.azurewebsites.net', methods=['GET', 'POST'])
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
@@ -65,8 +65,8 @@ def login():
 
 
 
-@app.route('/crudflask/logout')
-#@app.route('/crudflask.azurewebsites.net/logout')
+#@app.route('/crudflask/logout')
+@app.route('/logout')
 def logout():
     session.pop('loggedin', None)
     session.pop('id', None)
@@ -74,8 +74,8 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask/register', methods=['GET', 'POST'])
-#@app.route('/crudflask.azurewebsites.net/register', methods=['GET', 'POST'])
+#@app.route('/crudflask/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
@@ -102,8 +102,8 @@ def register():
 
 
 
-@app.route('/crudflask/home')
-#@app.route('/crudflask.azurewebsites.net/home')
+#@app.route('/crudflask/home')
+@app.route('/home')
 def home():
     title = "Teacher's Grading Dashboard"
     if 'loggedin' in session:
@@ -113,8 +113,8 @@ def home():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask/profile')
-#@app.route('/crudflask.azurewebsites.net/profile')
+#@app.route('/crudflask/profile')
+@app.route('/profile')
 def profile():
     if 'loggedin' in session:
         account = Account.query.filter_by(id=session['id']).first()
@@ -123,7 +123,8 @@ def profile():
 
 
 
-@app.route('/crudflask/create/', methods=['POST'])
+#@app.route('/crudflask/create', methods=['POST'])
+@app.route('/create', methods=['POST'])
 def create_student():
     msg = ''
     if request.method == 'POST':
@@ -147,7 +148,8 @@ def create_student():
     alumnos_reprobando = donkeys()
     return render_template('home.html', msg=msg, students=students, alumnos_reprobando=alumnos_reprobando)
 
-@app.route('/crudflask/edit/<id_username>', methods=['GET', 'POST'])
+# @app.route('/crudflask/edit/<id_username>', methods=['GET', 'POST'])
+@app.route('/edit/<id_username>', methods=['GET', 'POST'])
 def edit_student(id_username):
     msg='Alumno actualizado exitosamente'
     alumno = Student.query.filter_by(id=id_username).first()
@@ -169,7 +171,8 @@ def edit_student(id_username):
     return render_template('edit_student.html', alumno=alumno, students=students, alumnos_reprobando=alumnos_reprobando)
 
 
-@app.route('/crudflask/delete/<id_username>', methods=['GET', 'POST'])
+#@app.route('/crudflask/delete/<id_username>', methods=['GET', 'POST'])
+@app.route('/delete/<id_username>', methods=['GET', 'POST'])
 def delete_student(id_username):
 
     msg='Alumno eliminado exitosamente'
