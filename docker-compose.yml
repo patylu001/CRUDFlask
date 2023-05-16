@@ -13,10 +13,10 @@ services:
 
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:5001
+    command: python3 manage.py runserver 0.0.0.0:5002
     volumes:
       - .:/code
     ports:
-      - "5001:5001"
+      - "5002:5002"
     depends_on:
       - db
