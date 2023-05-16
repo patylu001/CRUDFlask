@@ -1,2 +1,8 @@
 flask-sqlalchemy
 flask-migrate
+pymysql
+cryptography
+sqlalchemy
+flask-mysqldb
+db
+app
