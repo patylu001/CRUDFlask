@@ -5,12 +5,12 @@
 {% block content %}
     <h2>Grade Central</h2>
     <div class="banner">
-            <h2>Alumnos Reprobando</h2>
-            <ul>
-                {% for alumno in alumnos_reprobando %}
-                    <li>{{' Student: ' ~ alumno.username ~ ' - ' ~ ' Second name: ' ~  alumno.second_name ~ ' - ' ~ ' Grade: ' ~  alumno.grade }}</li>
-                {% endfor %}
-            </ul>
+        <h2>Alumnos Reprobando</h2>
+        <ul>
+            {% for alumno in alumnos_reprobando %}
+                <li>Student: {{ alumno.name }} - Second name: {{ alumno.second_name }} - Grade: {{ alumno.grade }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="row">

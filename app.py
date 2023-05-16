@@ -45,7 +45,8 @@ class Student(db.Model):
 
 
 
-@app.route('/crudflask.azurewebsites.net', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
+#@app.route('/crudflask.azurewebsites.net', methods=['GET', 'POST'])
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
@@ -64,7 +65,8 @@ def login():
 
 
 
-@app.route('/crudflask.azurewebsites.net/logout')
+@app.route('/crudflask/logout')
+#@app.route('/crudflask.azurewebsites.net/logout')
 def logout():
     session.pop('loggedin', None)
     session.pop('id', None)
@@ -72,7 +74,8 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask.azurewebsites.net/register', methods=['GET', 'POST'])
+@app.route('/crudflask/register', methods=['GET', 'POST'])
+#@app.route('/crudflask.azurewebsites.net/register', methods=['GET', 'POST'])
 def register():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
@@ -99,17 +102,19 @@ def register():
 
 
 
-@app.route('/crudflask.azurewebsites.net/home')
+@app.route('/crudflask/home')
+#@app.route('/crudflask.azurewebsites.net/home')
 def home():
     title = "Teacher's Grading Dashboard"
     if 'loggedin' in session:
-        students = all_students()  # Obtén todos los registros de la base de datos
-        alumnos_reprobando = Student.query.filter(Student.grade < 59.99).all()  # Filtra los alumnos reprobando
+        students = Student.query.all()  # Obtén todos los registros de la base de datos
+        alumnos_reprobando = Student.query.filter(Student.grade <= 59.99).all()  # Filtra los alumnos reprobando
         return render_template('home.html', username=session['username'], students=students, alumnos_reprobando=alumnos_reprobando, title=title)
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask.azurewebsites.net/profile')
+@app.route('/crudflask/profile')
+#@app.route('/crudflask.azurewebsites.net/profile')
 def profile():
     if 'loggedin' in session:
         account = Account.query.filter_by(id=session['id']).first()
@@ -118,10 +123,8 @@ def profile():
 
 
 
-@app.route('/crudflask.azurewebsites.net/create/', methods=['POST'])
+@app.route('/crudflask/create/', methods=['POST'])
 def create_student():
-    students = all_students()
-    donkeys = donkey()
     msg = ''
     if request.method == 'POST':
         name = request.form['name']
@@ -131,28 +134,21 @@ def create_student():
         student = Student.query.filter_by(name=name).first()
         if student:
             flash('Student already exists!')
-            return render_template('home.html', students=students, donkeys=donkeys)
-
-
         elif not name or not second_name or not grade:
-            flash('Please fill out all the fields!')
-            return render_template('home.html', students=students, donkeys=donkeys)
 
+            flash('Please fill out all the fields!')
 
         else:
             new_student = Student(name=name, second_name=second_name, grade=grade)
             db.session.add(new_student)
             db.session.commit()
             flash('Student added successfully!')
-            return render_template('home.html', students=students, donkeys=donkeys)
-
-    return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
-
-@app.route('/crudflask.azurewebsites.net/edit/<id_username>', methods=['GET', 'POST'])
-def edit_student(id_username):
-
-    donkeys = donkey()
     students = all_students()
+    alumnos_reprobando = donkeys()
+    return render_template('home.html', msg=msg, students=students, alumnos_reprobando=alumnos_reprobando)
+
+@app.route('/crudflask/edit/<id_username>', methods=['GET', 'POST'])
+def edit_student(id_username):
     msg='Alumno actualizado exitosamente'
     alumno = Student.query.filter_by(id=id_username).first()
 
@@ -164,16 +160,18 @@ def edit_student(id_username):
         alumno.second_name = request.form['second_name']
         alumno.grade = request.form['grade']
         db.session.commit()
-        return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
+        students = all_students()
+        alumnos_reprobando = donkeys()
+        return render_template('home.html', msg=msg, students=students, alumnos_reprobando=alumnos_reprobando)
 
-    return render_template('edit_student.html', alumno=alumno, students=students, donkeys=donkeys)
+    students = all_students()
+    alumnos_reprobando = donkeys()
+    return render_template('edit_student.html', alumno=alumno, students=students, alumnos_reprobando=alumnos_reprobando)
 
 
-@app.route('/crudflask.azurewebsites.net/delete/<id_username>', methods=['GET', 'POST'])
+@app.route('/crudflask/delete/<id_username>', methods=['GET', 'POST'])
 def delete_student(id_username):
 
-    donkeys = donkey()
-    students = all_students()
     msg='Alumno eliminado exitosamente'
     account = Student.query.get(id_username)
 
@@ -183,14 +181,18 @@ def delete_student(id_username):
     if request.method == 'POST':
         db.session.delete(account)
         db.session.commit()
-        return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
+        alumnos_reprobando = donkeys()
+        students = all_students()
+        return render_template('home.html', msg=msg, students=students, alumnos_reprobando=alumnos_reprobando)
 
-    return render_template('delete_student.html', alumno=account, students=students, donkeys=donkeys)
+    alumnos_reprobando = donkeys()
+    students = all_students()
+    return render_template('delete_student.html', alumno=account, students=students, alumnos_reprobando=alumnos_reprobando)
 
 
-def donkey():
-    donkey_students = Student.query.filter(Student.grade <= 59.99).all()
-    return donkey_students
+def donkeys():
+    donkeys_students = Student.query.filter(Student.grade <= 59.99).all()
+    return donkeys_students
 
 def all_students():
     students = Student.query.all()
