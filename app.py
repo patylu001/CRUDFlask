@@ -103,7 +103,7 @@ def register():
 
 
 @app.route('/crudflask/home')
-#@app.route('/crudflask.azurewebsites.net/home')
+##@app.route('/crudflask.azurewebsites.net/home')
 def home():
     title = "Teacher's Grading Dashboard"
     if 'loggedin' in session:
