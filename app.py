@@ -1,4 +1,3 @@
-import app as app
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import re
@@ -22,7 +21,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-app.run(host='0.0.0.0', port=5002)
+app.run(host='0.0.0.0', port=5000)
 
 ##Create the Account model
 class Account(db.Model):
