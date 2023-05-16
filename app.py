@@ -41,7 +41,7 @@ class Student(db.Model):
     def __repr__(self):
         return f"<Student(name='{self.name}', second_name='{self.second_name}', grade='{self.grade}')>"
 
-
+#
 
 
 #@app.route('/', methods=['GET', 'POST'])
