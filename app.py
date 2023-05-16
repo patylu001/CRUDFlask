@@ -45,7 +45,7 @@ class Student(db.Model):
 
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/crudflask.azurewebsites.net', methods=['GET', 'POST'])
 def login():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
@@ -64,7 +64,7 @@ def login():
 
 
 
-@app.route('/crudflask/logout')
+@app.route('/crudflask.azurewebsites.net/logout')
 def logout():
     session.pop('loggedin', None)
     session.pop('id', None)
@@ -72,7 +72,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask/register', methods=['GET', 'POST'])
+@app.route('/crudflask.azurewebsites.net/register', methods=['GET', 'POST'])
 def register():
     msg = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
@@ -99,7 +99,7 @@ def register():
 
 
 
-@app.route('/crudflask/home')
+@app.route('/crudflask.azurewebsites.net/home')
 def home():
     title = "Teacher's Grading Dashboard"
     if 'loggedin' in session:
@@ -109,7 +109,7 @@ def home():
     return redirect(url_for('login'))
 
 
-@app.route('/crudflask/profile')
+@app.route('/crudflask.azurewebsites.net/profile')
 def profile():
     if 'loggedin' in session:
         account = Account.query.filter_by(id=session['id']).first()
@@ -118,7 +118,7 @@ def profile():
 
 
 
-@app.route('/crudflask/create/', methods=['POST'])
+@app.route('/crudflask.azurewebsites.net/create/', methods=['POST'])
 def create_student():
     students = all_students()
     donkeys = donkey()
@@ -148,7 +148,7 @@ def create_student():
 
     return render_template('home.html', msg=msg, students=students, donkeys=donkeys)
 
-@app.route('/crudflask/edit/<id_username>', methods=['GET', 'POST'])
+@app.route('/crudflask.azurewebsites.net/edit/<id_username>', methods=['GET', 'POST'])
 def edit_student(id_username):
 
     donkeys = donkey()
@@ -169,7 +169,7 @@ def edit_student(id_username):
     return render_template('edit_student.html', alumno=alumno, students=students, donkeys=donkeys)
 
 
-@app.route('/crudflask/delete/<id_username>', methods=['GET', 'POST'])
+@app.route('/crudflask.azurewebsites.net/delete/<id_username>', methods=['GET', 'POST'])
 def delete_student(id_username):
 
     donkeys = donkey()
@@ -189,7 +189,7 @@ def delete_student(id_username):
 
 
 def donkey():
-    donkey_students = Student.query.filter(Student.grade < 59.99).all()
+    donkey_students = Student.query.filter(Student.grade <= 59.99).all()
     return donkey_students
 
 def all_students():
