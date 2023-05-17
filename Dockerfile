@@ -4,4 +4,6 @@ WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 COPY . /app
-ENTRYPOINT FLASK_APP=/app/app.py flask run --host=0.0.0.0
+ENTRYPOINT [ "python3" ]
+
+CMD ["app.py"]
